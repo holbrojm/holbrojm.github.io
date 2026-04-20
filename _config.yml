@@ -1,16 +1,16 @@
 # Site settings
-title: Matt Holbrook | Data Scientist
-description: Matt Holbrook's personal website. Data Scientist & Machine Learning Engineer in Boulder, Colorado.
+title: Matt Holbrook | Staff Data Scientist
+description: Matt Holbrook's personal site. Staff Data Scientist shipping algorithm-led product features at Life360. Previously Coinbase, Golden State Warriors, Stats Perform, Uber.
 # baseurl: "" # the subpath of your site, e.g. /blog
-# url: "localhost:3000" # the base hostname & protocol for your site e.g. http://willianjusten.com.br
+url: "https://matt-holbrook.com"
 
 # User settings
 username: Matt Holbrook
-user_description: 
-user_title: Data Scientist | Machine Learning Engineer
+user_description: Staff Data Scientist at Life360. Ships algorithm-led product features. Previously Coinbase, Golden State Warriors, Stats Perform, Uber.
+user_title: Staff Data Scientist · Life360
 email: mholbrook0@gmail.com
 # twitter_username: lorem_ipsum
 # github_username:  lorem_ipsum
 # gplus_username:  lorem_ipsum
 
-exclude: ['package.json', 'src' , 'node_modules']
+exclude: ['package.json', 'src' , 'node_modules', 'gulpfile.js', 'package-lock.json']

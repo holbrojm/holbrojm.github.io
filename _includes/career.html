@@ -188,6 +188,22 @@
         .attr('fill', '#5c3bd1')
         .text('LIFE360');
 
+      // Landing notification badge (hidden until touchdown)
+      var notif = svg.append('g').attr('opacity', 0)
+        .attr('transform', 'translate(' + (w/2 - 88) + ',8)');
+      notif.append('rect')
+        .attr('width', 176).attr('height', 46).attr('rx', 11)
+        .attr('fill', '#fff').attr('stroke', '#dde1e7').attr('stroke-width', 1);
+      notif.append('circle').attr('cx', 20).attr('cy', 23).attr('r', 11).attr('fill', '#5c3bd1');
+      notif.append('text').attr('x', 20).attr('y', 27).attr('text-anchor', 'middle')
+        .attr('font-family', 'Inter, sans-serif').attr('font-size', 13).attr('fill', '#fff').text('✈');
+      notif.append('text').attr('x', 38).attr('y', 20)
+        .attr('font-family', 'Inter, sans-serif').attr('font-size', 11).attr('font-weight', 700)
+        .attr('fill', '#111').text('Landed · SFO');
+      notif.append('text').attr('x', 38).attr('y', 34)
+        .attr('font-family', 'Inter, sans-serif').attr('font-size', 9).attr('fill', '#8a93a0')
+        .text('Life360 · just now');
+
       var node = arcPath.node();
       var total = node.getTotalLength();
 
@@ -196,12 +212,14 @@
           plane.attr('transform','translate(' + (w*0.58) + ',' + (h-55) + ') rotate(0)');
           car.attr('transform','translate(' + (w-40) + ',' + (h-58) + ')');
           counter.text('30M+');
+          notif.attr('opacity', 1);
           return;
         }
-        // reset positions
+        // reset
         plane.attr('transform','translate(10,35)');
         car.attr('transform','translate(' + (w*0.66) + ',' + (h-58) + ')');
         counter.text('0');
+        notif.attr('opacity', 0);
 
         // Approach along cubic bezier — shallow ~7° glide slope at touchdown
         plane.transition().duration(2600).ease(d3.easeQuadInOut)
@@ -214,9 +232,16 @@
             };
           })
           .on('end', function() {
+            // Show notification on touchdown
+            notif.transition().duration(250).attr('opacity', 1);
             // Ground roll — plane levels out and taxis along the runway
             plane.transition().duration(900).ease(d3.easeQuadOut)
-              .attr('transform','translate(' + (w*0.60) + ',' + (h-55) + ') rotate(0)');
+              .attr('transform','translate(' + (w*0.60) + ',' + (h-55) + ') rotate(0)')
+              .on('end', function() {
+                // Fade notification out before loop restarts
+                notif.transition().delay(600).duration(500).attr('opacity', 0);
+                setTimeout(animate, 2000);
+              });
           });
 
         // Car drives off after ground roll completes
@@ -326,8 +351,8 @@
         .attr('fill','#ff6a13').attr('stroke','#7d2f00').attr('stroke-width', 1.2)
         .attr('cx', offPlayers[0].cx).attr('cy', offPlayers[0].cy);
 
-      // Expected Points label
-      var xpWrap = svg.append('g').attr('transform','translate(60,44)');
+      // Expected Points label — bottom-left of court
+      var xpWrap = svg.append('g').attr('transform','translate(55,' + (h - 82) + ')');
       xpWrap.append('text')
         .attr('font-family','Inter, sans-serif').attr('font-size', 10)
         .attr('letter-spacing', 2).attr('fill','#8a93a0').attr('font-weight', 600)
@@ -452,7 +477,7 @@
       svg.append('line').attr('x1', szX).attr('y1', szY + szH/3).attr('x2', szX + szW).attr('y2', szY + szH/3).attr('stroke', gridStroke);
       svg.append('line').attr('x1', szX).attr('y1', szY + 2*szH/3).attr('x2', szX + szW).attr('y2', szY + 2*szH/3).attr('stroke', gridStroke);
 
-      // Home plate (five-sided polygon beneath the zone)
+      // Home plate
       var plateY = szY + szH + 10;
       svg.append('polygon')
         .attr('points',
@@ -463,34 +488,81 @@
           (szX + 10) + ',' + (plateY + 8))
         .attr('fill', '#ffffff').attr('stroke', '#1a2d4f').attr('stroke-width', 1.5);
 
-      // Left-side callout text
-      var tx = 40;
-      svg.append('text').attr('x', tx).attr('y', 58)
-        .attr('font-family', 'Inter, sans-serif').attr('font-size', 10).attr('font-weight', 600)
+      // Header
+      var tx = 30;
+      svg.append('text').attr('x', tx).attr('y', 26)
+        .attr('font-family', 'Inter, sans-serif').attr('font-size', 9).attr('font-weight', 600)
         .attr('fill', '#8a93a0').attr('letter-spacing', 2)
         .text('VISTA EQUITY · 2019 HACKATHON');
-      svg.append('text').attr('x', tx).attr('y', 108)
-        .attr('font-family', 'Inter, sans-serif').attr('font-size', 34).attr('font-weight', 800)
+      svg.append('text').attr('x', tx).attr('y', 50)
+        .attr('font-family', 'Inter, sans-serif').attr('font-size', 22).attr('font-weight', 800)
         .attr('fill', '#c79b3d').attr('letter-spacing', 0.5)
-        .text('GRAND PRIZE');
-      svg.append('text').attr('x', tx).attr('y', 132)
-        .attr('font-family', 'Inter, sans-serif').attr('font-size', 12).attr('font-weight', 600)
-        .attr('fill', '#1a2d4f').attr('letter-spacing', 1.2)
-        .text('Across Vista\'s portfolio');
-      svg.append('text').attr('x', tx).attr('y', 172)
-        .attr('font-family', 'Inter, sans-serif').attr('font-size', 12).attr('fill', '#5a6373')
-        .text('Next-pitch prediction,');
-      svg.append('text').attr('x', tx).attr('y', 190)
-        .attr('font-family', 'Inter, sans-serif').attr('font-size', 12).attr('fill', '#5a6373')
-        .text('graph-based method.');
+        .text('$25K GRAND PRIZE');
 
-      // Pitch sequence: 4 thrown, 1 predicted. (col 0..2, row 0..2)
+      // Bar chart label
+      svg.append('text').attr('x', tx).attr('y', 73)
+        .attr('font-family', 'Inter, sans-serif').attr('font-size', 9).attr('font-weight', 600)
+        .attr('fill', '#8a93a0').attr('letter-spacing', 2)
+        .text('NEXT PITCH · MODEL OUTPUT');
+
+      // Probability distributions per state
+      // State 0 = prior; states 1-4 = updated after each thrown pitch
+      var probStates = [
+        { FB: 35, SL: 25, CH: 22, CU: 18 },
+        { FB: 28, SL: 30, CH: 25, CU: 17 },
+        { FB: 40, SL: 20, CH: 22, CU: 18 },
+        { FB: 45, SL: 25, CH: 18, CU: 12 },
+        { FB: 68, SL: 15, CH: 10, CU:  7 }
+      ];
+      var barTypes = ['FB', 'SL', 'CH', 'CU'];
+      var barLabelX = tx, barX = tx + 30, barMaxW = 215, barH = 14, barRowH = 32, barStartY = 83;
+
+      var barGroups = barTypes.map(function(type, i) {
+        var by = barStartY + i * barRowH;
+        var g = svg.append('g');
+        g.append('text')
+          .attr('x', barLabelX).attr('y', by + barH - 1)
+          .attr('font-family', 'Inter, sans-serif').attr('font-size', 10).attr('font-weight', 700)
+          .attr('fill', '#1a2d4f').text(type);
+        g.append('rect').attr('x', barX).attr('y', by)
+          .attr('width', barMaxW).attr('height', barH).attr('rx', 3).attr('fill', '#e8eaed');
+        var fill = g.append('rect').attr('x', barX).attr('y', by)
+          .attr('width', 0).attr('height', barH).attr('rx', 3).attr('fill', '#1a2d4f');
+        var pct = g.append('text')
+          .attr('x', barX + barMaxW + 8).attr('y', by + barH - 1)
+          .attr('font-family', 'Inter, sans-serif').attr('font-size', 10).attr('font-weight', 600)
+          .attr('fill', '#5a6373').text('—');
+        return { fill: fill, pct: pct, type: type };
+      });
+
+      function updateBars(stateIdx, dur) {
+        var state = probStates[stateIdx];
+        var isFinal = stateIdx === probStates.length - 1;
+        barGroups.forEach(function(bar) {
+          var p = state[bar.type];
+          var bw = barMaxW * p / 100;
+          var isTop = isFinal && bar.type === 'FB';
+          bar.fill.transition().duration(dur != null ? dur : 450)
+            .attr('width', bw).attr('fill', isTop ? '#c79b3d' : '#1a2d4f');
+          bar.pct.transition().duration(dur != null ? dur : 450)
+            .attr('fill', isTop ? '#c79b3d' : '#5a6373')
+            .tween('text', (function(b, prob) {
+              return function() {
+                var cur = parseFloat(b.pct.text()) || 0;
+                var interp = d3.interpolateNumber(cur, prob);
+                return function(t) { b.pct.text(Math.round(interp(t)) + '%'); };
+              };
+            })(bar, p));
+        });
+      }
+
+      // Pitch sequence — prob = model's probability for that pitch being next
       var pitches = [
-        { col: 0, row: 0, type: 'FB', speed: 94, pred: false },
-        { col: 2, row: 2, type: 'SL', speed: 87, pred: false },
-        { col: 1, row: 1, type: 'CH', speed: 85, pred: false },
-        { col: 0, row: 2, type: 'CU', speed: 79, pred: false },
-        { col: 2, row: 0, type: 'FB', speed: 96, pred: true }
+        { col: 0, row: 0, type: 'FB', prob: 35, pred: false },
+        { col: 2, row: 2, type: 'SL', prob: 30, pred: false },
+        { col: 1, row: 1, type: 'CH', prob: 22, pred: false },
+        { col: 0, row: 2, type: 'CU', prob: 12, pred: false },
+        { col: 2, row: 0, type: 'FB', prob: 68, pred: true  }
       ];
       pitches.forEach(function(p, i) {
         var jx = (i % 3 - 1) * 6;
@@ -500,6 +572,8 @@
       });
 
       var layer = svg.append('g');
+
+      function pitchLabel(p) { return p.type + ' ' + p.prob + '%'; }
 
       function drawStatic() {
         layer.selectAll('*').remove();
@@ -524,7 +598,7 @@
             .attr('font-family', 'Inter, sans-serif').attr('font-size', 9)
             .attr('fill', p.pred ? '#c79b3d' : '#5a6373')
             .attr('font-weight', p.pred ? 700 : 500)
-            .text(p.type + ' ' + p.speed);
+            .text(pitchLabel(p));
         });
       }
 
@@ -532,12 +606,15 @@
       function animate() {
         if (pulseTimer) clearTimeout(pulseTimer);
         layer.selectAll('*').remove();
+        updateBars(0, 0);
 
         if (reduced) {
+          updateBars(probStates.length - 1, 0);
           drawStatic();
           return;
         }
 
+        pulseTimer = setTimeout(animate, pitches.length * 480 + 2800);
         pitches.forEach(function(p, i) {
           setTimeout(function() {
             if (i > 0) {
@@ -550,14 +627,12 @@
                 .transition().duration(380)
                 .attr('x2', p.cx).attr('y2', p.cy);
             }
-
             layer.append('circle')
               .attr('cx', p.cx).attr('cy', p.cy).attr('r', 0)
               .attr('fill', p.pred ? '#ffc72c' : '#1a2d4f')
               .attr('stroke', p.pred ? '#1a2d4f' : 'none')
               .attr('stroke-width', p.pred ? 2 : 0)
               .transition().duration(300).attr('r', p.pred ? 9 : 6);
-
             layer.append('text')
               .attr('x', p.cx).attr('y', p.cy + 18)
               .attr('text-anchor', 'middle')
@@ -565,8 +640,13 @@
               .attr('fill', p.pred ? '#c79b3d' : '#5a6373')
               .attr('font-weight', p.pred ? 700 : 500)
               .attr('opacity', 0)
-              .text(p.type + ' ' + p.speed)
+              .text(pitchLabel(p))
               .transition().delay(200).duration(300).attr('opacity', 1);
+
+            // Bars update to next state 350ms after pitch appears
+            if (i < probStates.length - 1) {
+              setTimeout(function() { updateBars(i + 1); }, 350);
+            }
 
             if (p.pred) {
               var ring = layer.append('circle')

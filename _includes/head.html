@@ -5,7 +5,46 @@
 
   <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
   <meta name="description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+  <meta name="author" content="Matt Holbrook">
+  <meta name="keywords" content="Matt Holbrook, Staff Data Scientist, Applied Machine Learning, Applied ML, Data Science, Product Analytics, Experimentation, A/B Testing, On-Device ML, TensorFlow, LightGBM, MLflow, scikit-learn, Deep Learning, Bayesian inference, Python, SQL, dbt, Airflow, Snowflake, Databricks, BigQuery, LLMs, RAG, Evals, Life360, Coinbase, Golden State Warriors, Stats Perform">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+  <meta property="og:description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+  <meta property="og:url" content="https://matt-holbrook.com">
+  <meta property="og:image" content="https://matt-holbrook.com/images/headshot.jpeg">
+  <meta name="twitter:card" content="summary">
+
+  <!-- Structured data for search engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Matt Holbrook",
+    "jobTitle": "Staff Data Scientist",
+    "knowsAbout": ["Applied Machine Learning", "Product Analytics", "Experimentation", "On-Device ML", "TensorFlow", "LightGBM", "Deep Learning"],
+    "worksFor": { "@type": "Organization", "name": "Life360" },
+    "alumniOf": [
+      { "@type": "CollegeOrUniversity", "name": "Vanderbilt University" },
+      { "@type": "CollegeOrUniversity", "name": "Georgia Institute of Technology" }
+    ],
+    "email": "mailto:mholbrook0@gmail.com",
+    "url": "https://matt-holbrook.com",
+    "sameAs": [
+      "https://www.linkedin.com/in/mholbrook0"
+    ]
+  }
+  </script>
 
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | prepend: site.baseurl }}">
-  <link rel="shortcut icon" type="image/png" href="{{ '/assets/favicon.png' }}" >
+  <link rel="stylesheet" href="{{ '/assets/css/refresh.css' | prepend: site.baseurl }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/konpa/devicon@df6431e323547add1b4cf45992913f15286456d3/devicon.min.css" media="print" onload="this.media='all'">
+  <link rel="shortcut icon" type="image/png" href="{{ '/assets/favicon.png' | prepend: site.baseurl }}" >
+
+  <!-- Font + CDN preconnects -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 </head>

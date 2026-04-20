@@ -1,20 +1,17 @@
 <div id="particles-js">
   <div class="header">
+      <div class="hero-portrait">
+        <img src="{{ '/images/headshot.jpeg' | prepend: site.baseurl }}" alt="Matt Holbrook" width="180" height="180" loading="eager">
+      </div>
       <h1>
         <span class="site-title">{{ site.username }}</span>
         <span class="site-description">{{ site.user_title }}</span>
       </h1>
+      <p class="hero-tagline">I ship algorithm-led product features and help shape the strategy behind them.</p>
       <div class="header-icons">
-        <a aria-label="Send email" href="mailto:mholbrook0@gmail.com"><i class="icon fa fa-envelope"></i></a>
-        <a aria-label="My LinkedIn" target="_blank" href="https://www.linkedin.com/in/mholbrook0"><i class="icon fa fa-linkedin-square" aria-hidden="true"></i></a>
-        <a aria-label="My Github" target="_blank" href="https://github.com/holbrojm"><i class="icon fa fa-github-alt" aria-hidden="true"></i></a>
-      </div>
-      <div class="header-links">
-        <!-- <a class="link" href="#about" data-scroll>About Me</a> -->
-      </div>
-       <div >
-        <img src="./images/headshot.jpeg" alt="Headshot" width="300" height="300">>
+        <a aria-label="Send email" href="mailto:mholbrook0@gmail.com"><i class="icon fa fa-envelope" aria-hidden="true"></i></a>
+        <a aria-label="My LinkedIn" target="_blank" rel="noopener" href="https://www.linkedin.com/in/mholbrook0"><i class="icon fa fa-linkedin-square" aria-hidden="true"></i></a>
       </div>
   </div>
-  <a class="down" href="#about" data-scroll><i class="icon fa fa-chevron-down" aria-hidden="true"></i></a>
+  <a class="down" href="#about" data-scroll aria-label="Scroll to About"><i class="icon fa fa-chevron-down" aria-hidden="true"></i></a>
 </div>

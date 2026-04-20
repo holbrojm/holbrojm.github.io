@@ -41,7 +41,7 @@
         <svg class="viz-svg" viewBox="0 0 600 260" aria-hidden="true" preserveAspectRatio="xMidYMid meet"></svg>
       </div>
       <div class="highlight-body">
-        <div class="highlight-eyebrow">Stats Perform &middot; Vista Equity Partners Hackathon</div>
+        <div class="highlight-eyebrow">Stats Perform &middot; ML Engineer</div>
         <h3>Winning Vista Equity's AI/ML Hackathon</h3>
         <p>Originated the idea, recruited the team, and delivered the winning pitch at Vista Equity Partners' 2019 AI/ML Hackathon. $25K grand prize across Vista's portfolio companies. The concept later became a US patent application: Graph-Based Method of Next Pitch Prediction.</p>
         <ul class="highlight-cites">
@@ -59,32 +59,26 @@
       <li>
         <h4>Staff Data Scientist, Life360</h4>
         <span class="role-meta">2023 &ndash; Present &middot; Promoted from Lead to Staff, 2026 &middot; Remote</span>
-        <p>Ship algorithm-led product features and partner with Product, BD, and the C-suite on high-impact initiatives. Principal data expert on the proprietary geospatial and driving data.</p>
       </li>
       <li>
         <h4>Senior Data Scientist, Coinbase</h4>
         <span class="role-meta">2021 &ndash; 2023</span>
-        <p>First data scientist on the Web3 Wallet launch. Built the analytics framework, pipelines, and experimentation behind activation, transaction volume, and retention.</p>
       </li>
       <li>
         <h4>Founding Data Scientist, Golden State Warriors</h4>
         <span class="role-meta">2019 &ndash; 2022</span>
-        <p>First data scientist in Basketball Operations. Set the roadmap, picked the problems, and built the models, data foundations, and reporting used day-to-day by coaches and the front office.</p>
       </li>
       <li>
         <h4>AI/ML Engineer, Stats Perform</h4>
         <span class="role-meta">2018 &ndash; 2019</span>
-        <p>AI/ML research and development across soccer, baseball, and basketball. Named on three patent applications for proprietary predictive modeling.</p>
       </li>
       <li>
         <h4>Strategic Operations Manager, Uber</h4>
         <span class="role-meta">2017 &ndash; 2018</span>
-        <p>Pricing and demand-elasticity modeling to balance Uber's marketplace.</p>
       </li>
       <li>
         <h4>Earlier roles</h4>
         <span class="role-meta">2012 &ndash; 2017 &middot; eSpark Learning, The Advisory Board Company, UnitedHealth Group</span>
-        <p>Data Scientist, Senior Associate, and Senior Economics Analyst across edtech, healthcare advisory, and health insurance.</p>
       </li>
     </ol>
 
@@ -92,12 +86,18 @@
       <h3 class="career-fallback-title">Education</h3>
       <ul class="edu-list">
         <li>
-          <span class="edu-school">Georgia Institute of Technology</span>
-          <span class="edu-degree">M.S. Analytics</span>
+          <img src="/images/georgia-tech.svg" alt="Georgia Tech" class="edu-logo">
+          <div class="edu-text">
+            <span class="edu-school">Georgia Institute of Technology</span>
+            <span class="edu-degree">M.S. Analytics</span>
+          </div>
         </li>
         <li>
-          <span class="edu-school">Vanderbilt University</span>
-          <span class="edu-degree">B.A. Economics</span>
+          <img src="/images/vanderbilt-university-1.svg" alt="Vanderbilt" class="edu-logo">
+          <div class="edu-text">
+            <span class="edu-school">Vanderbilt University</span>
+            <span class="edu-degree">B.A. Economics</span>
+          </div>
         </li>
       </ul>
     </div>
@@ -142,8 +142,8 @@
       tower.append('rect').attr('x',-10).attr('y',0).attr('width',20).attr('height',14).attr('rx',2).attr('fill','#7875ea');
       tower.append('rect').attr('x',-7).attr('y',3).attr('width',14).attr('height',5).attr('fill','#fff').attr('opacity',0.8);
 
-      // Flight arc path (curving in from top-left to runway)
-      var arcD = 'M 10,60 Q ' + (w*0.3) + ',0 ' + (w*0.45) + ',' + (h-55);
+      // Flight arc path — cubic bezier gives a gentle glide slope at touchdown
+      var arcD = 'M 10,35 C 100,10 ' + (w*0.35) + ',' + (h-63) + ' ' + (w*0.46) + ',' + (h-55);
       var arcPath = svg.append('path').attr('d', arcD)
         .attr('fill','none').attr('stroke','#bfbdef')
         .attr('stroke-dasharray','3 4').attr('opacity',0.7);
@@ -156,7 +156,7 @@
       plane.append('polygon')
         .attr('points','-4,-3 0,-10 4,-3')
         .attr('fill','#5b57d6');
-      plane.attr('transform','translate(10,60)');
+      plane.attr('transform','translate(10,35)');
 
       // Uber car leaving
       var car = svg.append('g').attr('class','car').attr('transform','translate(' + (w*0.66) + ',' + (h-58) + ')');
@@ -193,30 +193,34 @@
 
       function animate() {
         if (reduced) {
-          plane.attr('transform','translate(' + (w*0.45) + ',' + (h-55) + ')');
+          plane.attr('transform','translate(' + (w*0.58) + ',' + (h-55) + ') rotate(0)');
           car.attr('transform','translate(' + (w-40) + ',' + (h-58) + ')');
           counter.text('30M+');
           return;
         }
         // reset positions
-        plane.attr('transform','translate(10,60)');
+        plane.attr('transform','translate(10,35)');
         car.attr('transform','translate(' + (w*0.66) + ',' + (h-58) + ')');
         counter.text('0');
 
-        // Animate plane along arc
+        // Approach along cubic bezier — shallow ~7° glide slope at touchdown
         plane.transition().duration(2600).ease(d3.easeQuadInOut)
           .tween('flight', function() {
             return function(t) {
               var p = node.getPointAtLength(total * t);
-              // angle of motion
               var p2 = node.getPointAtLength(Math.min(total, total * t + 1));
               var ang = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
               plane.attr('transform','translate(' + p.x + ',' + p.y + ') rotate(' + ang + ')');
             };
+          })
+          .on('end', function() {
+            // Ground roll — plane levels out and taxis along the runway
+            plane.transition().duration(900).ease(d3.easeQuadOut)
+              .attr('transform','translate(' + (w*0.60) + ',' + (h-55) + ') rotate(0)');
           });
 
-        // Car drives off after plane lands
-        car.transition().delay(2700).duration(1400).ease(d3.easeCubicOut)
+        // Car drives off after ground roll completes
+        car.transition().delay(3600).duration(1400).ease(d3.easeCubicOut)
           .attr('transform','translate(' + (w + 30) + ',' + (h-58) + ')');
 
         // Counter ticks up to 30M (real public stat from the case study)

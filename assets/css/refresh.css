@@ -29,6 +29,9 @@ main {
 }
 
 /* ============ HERO ============ */
+/* Reduce hero so content below peeks up, signalling scroll */
+#particles-js { min-height: 88vh; }
+
 .header { font-family: 'Inter', 'Montserrat', sans-serif; }
 
 .hero-portrait {

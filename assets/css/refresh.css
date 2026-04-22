@@ -412,6 +412,34 @@ main {
   line-height: 1.55;
 }
 
+/* ============ COMPANY LOGOS ============ */
+.highlight-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.co-logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.co-logo-lg {
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+}
+.career-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.career-row > div {
+  display: flex;
+  flex-direction: column;
+}
+
 /* ============ FOOTER ============ */
 .footer {
   text-align: center;

@@ -71,12 +71,20 @@ main {
 .hero-tagline {
   color: rgba(255,255,255,0.8);
   max-width: 36ch;
-  margin: 1rem auto 1.25rem;
+  margin: 1rem auto 0.5rem;
   font-size: 0.95rem;
   line-height: 1.55;
 }
 @media (min-width: 768px) {
   .hero-tagline { font-size: 1.05rem; }
+}
+.hero-location {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 auto 1.25rem;
+  font-weight: 500;
 }
 
 /* ============ BIO / ABOUT SECTION ============ */
